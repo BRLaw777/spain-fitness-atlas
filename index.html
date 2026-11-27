@@ -223,6 +223,7 @@ const osm = L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
 L.control.layers({ "Clean Light Gray (Esri)": esriGray, "Official IGN España": ignEs, "OpenStreetMap": osm }, null, { position: "bottomright" }).addTo(map);
 
 const canvasRenderer = L.canvas({ padding: 0.5 });
+const isoRenderer = L.svg({ padding: 0.5 });
 let markersLayer = L.layerGroup().addTo(map);
 let isoLayer = L.layerGroup().addTo(map);
 let selectedClubIdx = null;
@@ -329,9 +330,9 @@ function showClubDetail(idx) {
   isoLayer.clearLayers();
   const dRings = DATA.drivePolys[idx];
   const wRings = DATA.walkPolys[idx];
-  if (dRings) dRings.forEach(ring => L.polygon(ring, { color: "#1d4ed8", weight: 2, dashArray: "6,4", fillColor: "#3b82f6", fillOpacity: 0.13 }).addTo(isoLayer));
-  if (wRings) wRings.forEach(ring => L.polygon(ring, { color: "#dc2626", weight: 2.2, fillColor: "#ef4444", fillOpacity: 0.24 }).addTo(isoLayer));
-  L.circleMarker([cl.la, cl.lo], { radius: 8, color: "#0f172a", weight: 2.5, fillColor: DATA.colors[cl.c], fillOpacity: 1 }).addTo(isoLayer);
+  if (dRings) dRings.forEach(ring => L.polygon(ring, { renderer: isoRenderer, interactive: false, color: "#1d4ed8", weight: 2, dashArray: "6,4", fillColor: "#3b82f6", fillOpacity: 0.13 }).addTo(isoLayer));
+  if (wRings) wRings.forEach(ring => L.polygon(ring, { renderer: isoRenderer, interactive: false, color: "#dc2626", weight: 2.2, fillColor: "#ef4444", fillOpacity: 0.24 }).addTo(isoLayer));
+  L.circleMarker([cl.la, cl.lo], { renderer: isoRenderer, interactive: false, radius: 8, color: "#0f172a", weight: 2.5, fillColor: DATA.colors[cl.c], fillOpacity: 1 }).addTo(isoLayer);
 
   document.getElementById("dcChain").textContent = DATA.chains[cl.c] + (cl.ac !== "Organic" ? "  •  " + cl.ob : "");
   document.getElementById("dcName").textContent = cl.n;
